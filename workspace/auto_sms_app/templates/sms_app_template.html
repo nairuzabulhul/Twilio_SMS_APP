@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Twilio SMS Automation </title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+	<link rel="stylesheet" type="text/css" href="/templates/style.css">
+	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+	<style>
+        
+		#phone_field1 {
+			display: inline-block;
+			width: 20%;
+			min-width: 50px;
+		}
+		#phone_field2 {
+			display: inline-block;
+			width: 20%;
+			min-width: 50px;
+		}
+		#phone_field3 {
+			display: inline-block;
+			width: 30%;
+			min-width: 65px;
+		}
+        
+        body {
+        	background:url("https://s31.postimg.org/79mrjonnv/Lt0_Dwxdq_RKSQk_X7439ey_Chaz_fisheye_11.jpg") fixed center;
+        	background-repeat: no-repeat;
+        	background-size:cover;
+        }
+            
+        h1 {
+        	font-family: 'Montserrat', sans-serif;
+        	family-weight:400;
+        	font-size:3em;
+        	color:#2A4814;
+        	text-align:center;
+  
+        
+        }
+        
+        .container {
+        	min-width: 250px;
+        	max-width: 480px;
+        	background-color:rgba(172,161,144,0.7);
+        	margin-top:7%;
+        	padding:1.4%;
+        }
+
+        #messageTextarea {
+        	border-color: #22375A;
+        	border-radius:2px;
+        }
+			
+		.row{
+			padding-bottom:5px;
+			padding-left:5px;
+		}
+		
+		label {
+		  	font-family: 'Montserrat', sans-serif;
+		  	color:#2A4814;
+		  	padding-top:7px;
+		}
+		  
+        @media (min-width: 678px) {
+			#phone_field1 {
+				width: 16.67%;
+			}
+			#phone_field2 {
+				width: 16.67%;
+			}
+			#phone_field3 {
+				width: 25%;
+			}
+        }
+        
+        input[type=number]::-webkit-inner-spin-button, 
+		input[type=number]::-webkit-outer-spin-button { 
+  	   -webkit-appearance: none; 
+       	   margin: 0; 
+       }
+       
+       .btn{
+       	width:120px;
+       	height:40px;
+       	background-color:rgba(73,73,73,0.6);
+       	color:white;
+       	font-family: 'Montserrat', sans-seri
+       }
+       .btn:hover{
+       	background-color:rgba(73,73,73,0.4);
+       	color:white;
+       }
+		  
+	</style>
+</head>
+<!--END OF HEAD-->
+<body>
+    <div class="container">
+
+	    <h1>Auto SMS Message</h1>
+     
+     	{% for message in messages %}
+    		<div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>
+    			{{ message }}
+    		</div>
+		{% endfor %}
+     
+    	<form action="#" method="POST" novalidate>
+    	     
+            {% csrf_token %}
+    	    
+    	    {% if form.non_field_errors %}
+    	    <div class="alert alert-warning">
+	    	    {{ form.non_field_errors }}  <!--show rasing errors on the template ##1 -->
+	    	</div>
+    	    {% endif %}
+    	    
+    	    <label for="messageTextarea">Client number</label>
+    		<div class="form-group">
+                <div id="phone_field1">
+                    <input type="number" class="form-control"
+                           placeholder="xxx" name="client_number1"
+                           id="client1"  required= "required" maxlength=3
+                           value="{{ form.client_number1.value|default_if_none:"" }}">  
+                </div>
+                -
+    		    <div id="phone_field2">
+    		        <input type="number" class="form-control"
+    		               placeholder="xxx" name="client_number2"
+    		               required= "required" maxlength=3
+    		               value="{{ form.client_number2.value|default_if_none:"" }}">
+    		    </div>
+    		    -
+    			<div id="phone_field3">
+    		        <input type="number" class="form-control"
+    		               placeholder="xxxx" name="client_number3"
+    		               required= "required"  maxlength=4
+    		               value="{{ form.client_number3.value|default_if_none:"" }}">
+    		    </div>
+    		</div>
+    		<!--END -->
+    		<fieldset class="form-group">
+    		    <label for="exampleTextarea">Message</label>
+        	    {% if form.message.errors %}
+    	    	<div class="alert alert-warning">
+    		    	{{ form.message.errors }}
+    		   	</div>
+        	    {% endif %}
+    		    <textarea class="form-control" id="exampleTextarea"
+    		              rows="3" name="message" required="required"
+    		    	>{{ form.message.value|default_if_none:"" }}</textarea>
+    		</fieldset>
+    		<!--END -->
+    	  <button type="submit" class="btn btn-primary" id="sub_button" name="sub_button">Submit</button>
+    	
+    	</form><!--END OF FORM-->
+	
+	   </div> 
+	</div>
+	<!--END OF CONTAINER-->
+</body>
+</html>
